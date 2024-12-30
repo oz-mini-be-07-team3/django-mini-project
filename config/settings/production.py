@@ -4,7 +4,7 @@ DEBUG = False
 ALLOWED_HOSTS = ['your-production-domain.com'] # 허용할 host
 
 INSTALLED_APPS += [
-
+    'users.apps.UsersConfig',
 ]
 
 DATABASES = {
