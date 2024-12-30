@@ -4,7 +4,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['localhost', '127.0.0.1'] # 로컬만 허용
 
 INSTALLED_APPS += [
-    'users.apps.UsersConfig',
+    'apps.users.apps.UsersConfig',
 ]
 
 DATABASES = {
