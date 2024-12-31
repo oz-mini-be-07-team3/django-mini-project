@@ -5,6 +5,9 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1'] # 로컬만 허용
 
 INSTALLED_APPS += [
     'apps.users.apps.UsersConfig',
+    'apps.accounts.apps.AccountsConfig',
+    
+
 ]
 
 DATABASES = {
