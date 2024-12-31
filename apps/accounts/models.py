@@ -1,6 +1,5 @@
 from django.db import models
 from apps.common.models import CommonModel
-from django.conf import settings
 
 BANK_CODES = [
     ("000", "알수없음"),
@@ -110,7 +109,7 @@ ACCOUNTS_TYPE = [
 
 # Create your models here.
 class Accounts(CommonModel):
-    user = models.ForeignKey('settings.AUTH_USER_MODEL', on_delete=models.CASCADE) # user_id(FK)
+    user = models.ForeignKey('users.User', on_delete=models.CASCADE) # user_id(FK)
     bank_code = models.CharField(max_length=3, choices=BANK_CODES, default="000") # 기본적으로 000 "알수없음"선택됨
     account_number = models.CharField(max_length=30)
     account_type = models.CharField(max_length=30, choices=ACCOUNTS_TYPE, default="CHECKING") # 기본적으로 입출금 선택됨
