@@ -25,6 +25,8 @@ class UserManager(BaseUserManager):
 			raise ValueError('superuser는 staff여야 합니다.')
 		if not extra_fields.get('is_superuser'):
 			raise ValueError('superuser는 is_superuser가 True여야 합니다.')
+		if not extra_fields.get('name'):
+			raise ValueError('superuser는 이름이 있어야합니다.')
 
 		return self.create_user(email, password, **extra_fields)
 
@@ -41,13 +43,13 @@ class User(AbstractBaseUser, CommonModel, PermissionsMixin):
 
 	# 사용자 인증에 필요할 필드 정의!
 	USERNAME_FIELD = 'email'
-	REQUIRED_FIELDS = [] # create_superuser에서 필수로 요구되는 추가 필드
+	REQUIRED_FIELDS = ['name'] # create_superuser에서 필수로 요구되는 추가 필드
 
 	objects = UserManager()
 
 	class Meta:
 		verbose_name = '사용자' # 모델 들어갔을 때 타이틀
-		verbose_name_plural = '사용자들' # 모델 이름
+		verbose_name_plural = '사용자' # 모델 이름
 
 	# 이름을 객체 이름이 아니라 email로 변경
 	def __str__(self):
