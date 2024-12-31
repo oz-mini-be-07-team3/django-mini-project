@@ -1,5 +1,5 @@
 from django.db import models
-from common.models import CommonModel
+from apps.common.models import CommonModel
 
 BANK_CODES = [
     ("000", "알수없음"),
