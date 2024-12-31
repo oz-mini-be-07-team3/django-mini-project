@@ -108,7 +108,7 @@ ACCOUNTS_TYPE = [
 ]
 
 # Create your models here.
-class Accounts(CommonModel):
+class Account(CommonModel):
     user = models.ForeignKey('users.User', on_delete=models.CASCADE) # user_id(FK)
     bank_code = models.CharField(max_length=3, choices=BANK_CODES, default="000") # 기본적으로 000 "알수없음"선택됨
     account_number = models.CharField(max_length=30)
