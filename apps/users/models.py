@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
+from apps.common.models import CommonModel
 
 # 사용자 관리 기능(생성, 삭제 등)
 class UserManager(BaseUserManager):
@@ -28,7 +29,7 @@ class UserManager(BaseUserManager):
 		return self.create_user(email, password, **extra_fields)
 
 
-class User(AbstractBaseUser, PermissionsMixin):
+class User(AbstractBaseUser, CommonModel, PermissionsMixin):
 	# verbose_name은 admin페이지에서 보이는 이름
 	email = models.EmailField(unique=True, verbose_name='이메일 주소')
 	name = models.CharField(max_length=50, verbose_name='이름')
