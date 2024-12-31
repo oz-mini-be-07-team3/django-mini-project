@@ -118,5 +118,6 @@ class Account(CommonModel):
 
     def __str__(self):
         return f"{self.get_bank_code_display()} - {self.account_number} ({self.get_account_type_display()})" # 국민은행 - 1234567890 (입출금)
+        # get_XXX_display 함수: 모델의 속성 값을 사람이 읽을 수 있는 문장으로 변환
 
 
