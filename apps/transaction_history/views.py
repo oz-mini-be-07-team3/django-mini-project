@@ -2,7 +2,8 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.permissions import AllowAny
+from rest_framework_simplejwt.authentication import JWTAuthentication
+# from rest_framework.permissions import AllowAny
 
 from apps.transaction_history.models import TransactionHistory
 from apps.transaction_history.serializers import TransactionHistorySerializer
@@ -11,7 +12,9 @@ from apps.users.models import User
 
 
 class TransactionHistoryView(APIView):
-    # permission_classes = [IsAuthenticated] # 인증된 사용자만 접근 가능
+
+    authentication_classes = (JWTAuthentication,)  # jwt token이 있는지 검증
+    permission_classes = (IsAuthenticated,)  # 어떤 인증 방식이든 인증된 유저인지 검증
 
     # 현재 로그인 된 사용자 거래 내역 조회
     def get(self, request):
@@ -24,19 +27,22 @@ class TransactionHistoryView(APIView):
             return Response({"error": "사용자 계좌를 찾을 수 없습니다."}, status=status.HTTP_404_NOT_FOUND)
 
         # 해당 계좌의 모든 거래 내역 조회 - 최근 거래 시간 순으로 정렬
-        transactions = TransactionHistory.objects.filter(account__in=accounts).order_by("-transaction_timestamp")
+        transactions = TransactionHistory.objects.filter(account__in=accounts).order_by("-transaction_timestamp") # 내림차순
+        # account__in 은 account 필드 값이 특정 집합에 포함되는지 확인
         serializer = TransactionHistorySerializer(transactions, many=True) # 거래 내역 직렬화
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     # 인증되지 않은 사용자를 기본 사용자로 설정 (테스트 환경용)
-    def initial(self, request, *args, **kwargs):
-        super().initial(request, *args, **kwargs)
-        if request.user.is_anonymous:
-            request.user = User.objects.first()  # 첫 번째 사용자 가져오기
+    # def initial(self, request, *args, **kwargs):
+    #     super().initial(request, *args, **kwargs)
+    #     if request.user.is_anonymous:
+    #         request.user = User.objects.first()  # 첫 번째 사용자 가져오기
 
 
-class TransactionHistoryDetailAccountView(APIView):
-    # permission_classes = [IsAuthenticated] # 인증된 사용자만 접근 가능
+class TransactionHistoryAccountView(APIView):
+
+    authentication_classes = (JWTAuthentication,)  # jwt token이 있는지 검증
+    permission_classes = (IsAuthenticated,)  # 어떤 인증 방식이든 인증된 유저인지 검증
 
     # 특정 계좌 거래 내역 조회
     def get(self, request, account_id):
@@ -54,13 +60,17 @@ class TransactionHistoryDetailAccountView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     # 인증되지 않은 사용자를 기본 사용자로 설정 (테스트 환경용)
-    def initial(self, request, *args, **kwargs):
-        super().initial(request, *args, **kwargs)
-        if request.user.is_anonymous:
-            request.user = User.objects.first()  # 첫 번째 사용자 가져오기
+    # def initial(self, request, *args, **kwargs):
+    #     super().initial(request, *args, **kwargs)
+    #     if request.user.is_anonymous:
+    #         request.user = User.objects.first()  # 첫 번째 사용자 가져오기
 
 
 class TransactionHistoryCreateView(APIView):
+
+    authentication_classes = (JWTAuthentication,)  # jwt token이 있는지 검증
+    permission_classes = (IsAuthenticated,)  # 어떤 인증 방식이든 인증된 유저인지 검증
+
     # 거래 내역 생성
     def post(self, request):
         # 인증 확인
@@ -113,27 +123,32 @@ class TransactionHistoryCreateView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     # 인증되지 않은 사용자를 기본 사용자로 설정 (테스트 환경용)
-    def initial(self, request, *args, **kwargs):
-        super().initial(request, *args, **kwargs)
-        if request.user.is_anonymous:
-            request.user = User.objects.first()  # 첫 번째 사용자 가져오기
+    # def initial(self, request, *args, **kwargs):
+    #     super().initial(request, *args, **kwargs)
+    #     if request.user.is_anonymous:
+    #         request.user = User.objects.first()  # 첫 번째 사용자 가져오기
 
 
 class TransactionHistoryDetailView(APIView):
     # 인증되지 않은 사용자를 기본 사용자로 설정 (테스트 환경용)
-    def initial(self, request, *args, **kwargs):
+    # def initial(self, request, *args, **kwargs):
+    #
+    #     super().initial(request, *args, **kwargs)
+    #     if request.user.is_anonymous:
+    #         request.user = User.objects.first()  # 첫 번째 사용자 가져오기
 
-        super().initial(request, *args, **kwargs)
-        if request.user.is_anonymous:
-            request.user = User.objects.first()  # 첫 번째 사용자 가져오기
-
-    permission_classes = [AllowAny]  # 모든 사용자 접근 가능
+    authentication_classes = (JWTAuthentication,)  # jwt token이 있는지 검증
+    permission_classes = (IsAuthenticated,)  # 어떤 인증 방식이든 인증된 유저인지 검증
 
     # 특정 거래 내역 수정
     def put(self, request, transaction_id):
         try:
             # 거래 내역 ID로 특정 거래 내역 조회 (로그인된 사용자의 계좌와 연결된 거래만 허용)
             transaction = TransactionHistory.objects.get(id=transaction_id, account__user=request.user)
+            # account__user 는 관계 모델의 특정 필드를 지정해서 필터링하거나 값을 가져올 때 사용
+            # TransactionHistory 모델의 account 필드는 Account 모델을 참조하는 ForeignKey
+            # Account 모델의 user 필드는 User 모델을 참조하는 ForeignKey
+            # account__user 는 TransactionHistory 에서 account 를 따라가고, 그 계좌의 user 를 필터링 하는 조건
         except TransactionHistory.DoesNotExist:
             # 거래 내역이 없으면 404 응답 반환
             return Response({"error": "거래 내역을 찾을 수 없습니다."}, status=status.HTTP_404_NOT_FOUND)
