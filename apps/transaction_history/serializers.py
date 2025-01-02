@@ -6,4 +6,4 @@ class TransactionHistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = TransactionHistory
         fields = ["id", "account", "transaction_type", "transaction_method", "transaction_amount", "post_transaction_amount", "transaction_timestamp"]
-        # fields = "__all__"ß
+        # fields = "__all__"
