@@ -112,7 +112,7 @@ ACCOUNTS_TYPE = [
 class Account(CommonModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE) # user_id(FK)
     bank_code = models.CharField(max_length=3, choices=BANK_CODES, default="000") # 기본적으로 000 "알수없음"선택됨
-    account_number = models.CharField(max_length=30)
+    account_number = models.CharField(max_length=30,unique=True) # 계좌번호는 유니크 
     account_type = models.CharField(max_length=30, choices=ACCOUNTS_TYPE, default="CHECKING") # 기본적으로 입출금 선택됨
     balance = models.IntegerField()
 
