@@ -10,7 +10,7 @@ INSTALLED_APPS += [
     'apps.users.apps.UsersConfig',
     'apps.accounts.apps.AccountsConfig',
     'apps.transaction_history.apps.TransactionHistoryConfig',
-    
+    'drf_spectacular',
 ]
 
 DATABASES = {

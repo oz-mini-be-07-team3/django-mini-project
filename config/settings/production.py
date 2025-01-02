@@ -1,10 +1,15 @@
 from .base import *
 
 DEBUG = False
-ALLOWED_HOSTS = ['your-production-domain.com'] # 허용할 host
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost').split(',') # 허용할 host
 
 INSTALLED_APPS += [
+    'rest_framework',
+    'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
     'apps.users.apps.UsersConfig',
+    'apps.accounts.apps.AccountsConfig',
+    'apps.transaction_history.apps.TransactionHistoryConfig',
 ]
 
 DATABASES = {
