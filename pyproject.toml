@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "django-mini-project"
+version = "0.1.0"
+description = "team3"
+authors = ["hyo <umdoongs@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies] # 배포 환경
+python = "^3.13"
+django = "5.1.4"
+djangorestframework = "3.15.2"
+psycopg2 = "2.9.10"
+django-environ = "0.11.2"
+djangorestframework-simplejwt = "^5.3.1"
+
+
+[tool.poetry.group.dev.dependencies] # 개발 환경
+drf-spectacular = ">=0.28.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

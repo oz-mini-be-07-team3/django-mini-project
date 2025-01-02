@@ -1,0 +1,3 @@
+drf-spectacular>=0.28.0
+
+# poetry add $(cat requirements.dev.txt) -G dev
