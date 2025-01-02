@@ -1,3 +1,3 @@
 ![image](https://github.com/user-attachments/assets/4a71f788-04e9-4dfd-bcf6-7639e67a2a52)
 
-<img width="364" alt="Screenshot 2024-12-31 at 17 22 42" src="https://github.com/user-attachments/assets/eaa446c2-c7e4-4099-9667-94eac0752e1f" />
+<img width="876" alt="Screenshot 2025-01-02 at 13 57 05" src="https://github.com/user-attachments/assets/c4db23d1-3316-46c3-b7e9-8425d4b77c2e" />
