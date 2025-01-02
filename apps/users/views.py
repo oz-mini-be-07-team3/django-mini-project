@@ -54,10 +54,17 @@ class UserDetailView(APIView):
 	authentication_classes = (JWTAuthentication,) # jwt token이 있는지 검증
 	permission_classes = (IsAuthenticated,) # 어떤 인증 방식이든 인증된 유저인지 검증
 
-	# 본인의 정보만 조회/수정/삭제가 가능하게 체크
+	# superuser가 아니라면 본인의 정보만 조회/수정/삭제가 가능하게 체크
 	def check_permission(self, request, pk):
-		if request.user.id != pk:
+		if not request.user.is_superuser and request.user.id != pk:
 			raise PermissionDenied("권한이 없습니다.")
+
+	# 슈퍼유저가 아니라면 권한 field 수정 금지
+	def validate_user_fields(self, request):
+		fields = {"is_staff", "is_admin", "is_superuser"}
+		# superuser가 아닌 유저가 요청 데이터에 fields를 1개라도 포함시키면 denied
+		if not request.user.is_superuser and any(field in request.data for field in fields):
+			raise PermissionDenied("권한 관련 필드는 수정할 수 없습니다.")
 
 	# 조회
 	def get(self, request, pk):
@@ -68,21 +75,23 @@ class UserDetailView(APIView):
 
 	# 수정
 	def put(self, request, pk):
-		self.check_permission(request, pk)
+		self.check_permission(request, pk) # 권한 확인
+		self.validate_user_fields(request)  # 권한 필드 수정 여부 확인
 		user = get_object_or_404(User, pk=pk)
+
 		# put은 원래 모든 field를 요청해야하지만 partial로 patch와 같이 일부 필드만 요청해도 수정되도록 만듦
 		serializer = UserSerializer(user, data=request.data, partial=True)
 
 		if serializer.is_valid():
 			serializer.save()
 
-			return Response(serializer.data)
+			return Response(serializer.data, status=status.HTTP_200_OK)
 		else:
-			return Response(serializer.errors)
+			return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 	# 삭제
 	def delete(self, request, pk):
-		self.check_permission(request, pk)  # 예외가 발생하지 않으면 다음으로 진행
+		self.check_permission(request, pk)  # superuser or 본인 확인
 		user = get_object_or_404(User, pk=pk)
 		user.delete()
 		return Response("delete complete", status=status.HTTP_200_OK)

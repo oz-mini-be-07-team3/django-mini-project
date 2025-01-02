@@ -3,7 +3,6 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
-# from rest_framework.permissions import AllowAny
 
 from apps.transaction_history.models import TransactionHistory
 from apps.transaction_history.serializers import TransactionHistorySerializer
@@ -12,7 +11,6 @@ from apps.users.models import User
 
 
 class TransactionHistoryView(APIView):
-
     authentication_classes = (JWTAuthentication,)  # jwt token이 있는지 검증
     permission_classes = (IsAuthenticated,)  # 어떤 인증 방식이든 인증된 유저인지 검증
 
@@ -32,15 +30,8 @@ class TransactionHistoryView(APIView):
         serializer = TransactionHistorySerializer(transactions, many=True) # 거래 내역 직렬화
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    # 인증되지 않은 사용자를 기본 사용자로 설정 (테스트 환경용)
-    # def initial(self, request, *args, **kwargs):
-    #     super().initial(request, *args, **kwargs)
-    #     if request.user.is_anonymous:
-    #         request.user = User.objects.first()  # 첫 번째 사용자 가져오기
-
 
 class TransactionHistoryAccountView(APIView):
-
     authentication_classes = (JWTAuthentication,)  # jwt token이 있는지 검증
     permission_classes = (IsAuthenticated,)  # 어떤 인증 방식이든 인증된 유저인지 검증
 
@@ -59,25 +50,13 @@ class TransactionHistoryAccountView(APIView):
         serializer = TransactionHistorySerializer(transactions, many=True) # 거래 내역 직렬화
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    # 인증되지 않은 사용자를 기본 사용자로 설정 (테스트 환경용)
-    # def initial(self, request, *args, **kwargs):
-    #     super().initial(request, *args, **kwargs)
-    #     if request.user.is_anonymous:
-    #         request.user = User.objects.first()  # 첫 번째 사용자 가져오기
-
 
 class TransactionHistoryCreateView(APIView):
-
     authentication_classes = (JWTAuthentication,)  # jwt token이 있는지 검증
     permission_classes = (IsAuthenticated,)  # 어떤 인증 방식이든 인증된 유저인지 검증
 
     # 거래 내역 생성
     def post(self, request):
-        # 인증 확인
-        if request.user.is_anonymous:
-            request.user = User.objects.first()
-        #     return Response({"error": "인증이 필요합니다."}, status=status.HTTP_401_UNAUTHORIZED)
-
         # 요청 데이터에서 계좌 ID 확인
         account_id = request.data.get("account")
         if not account_id:
@@ -122,21 +101,8 @@ class TransactionHistoryCreateView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    # 인증되지 않은 사용자를 기본 사용자로 설정 (테스트 환경용)
-    # def initial(self, request, *args, **kwargs):
-    #     super().initial(request, *args, **kwargs)
-    #     if request.user.is_anonymous:
-    #         request.user = User.objects.first()  # 첫 번째 사용자 가져오기
-
 
 class TransactionHistoryDetailView(APIView):
-    # 인증되지 않은 사용자를 기본 사용자로 설정 (테스트 환경용)
-    # def initial(self, request, *args, **kwargs):
-    #
-    #     super().initial(request, *args, **kwargs)
-    #     if request.user.is_anonymous:
-    #         request.user = User.objects.first()  # 첫 번째 사용자 가져오기
-
     authentication_classes = (JWTAuthentication,)  # jwt token이 있는지 검증
     permission_classes = (IsAuthenticated,)  # 어떤 인증 방식이든 인증된 유저인지 검증
 
