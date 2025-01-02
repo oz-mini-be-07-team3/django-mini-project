@@ -5,8 +5,8 @@ from apps.accounts.models import Account
 
 class TransactionHistory(CommonModel):
     account = models.ForeignKey(Account, on_delete=models.CASCADE) # 계좌 정보
-    post_transaction_amount = models.DecimalField(max_digits=18, decimal_places=2) # 거래 금액
-    transaction_amount = models.DecimalField(max_digits=18, decimal_places=2) # 거래 후 잔액
+    post_transaction_amount = models.DecimalField(max_digits=18, decimal_places=2) # 거래 후 잔액
+    transaction_amount = models.DecimalField(max_digits=18, decimal_places=2, default=Account.balance) # 거래 금액
     transaction_method = models.CharField(
         max_length=30,
         choices=[
