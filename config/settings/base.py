@@ -12,15 +12,15 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import os
 from pathlib import Path
 import environ
-
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent # 프로젝트 기준점, base의 부모의 부모니까 config까지만 올라감
+BASE_DIR = Path(__file__).resolve().parent.parent.parent # 프로젝트 기준점, base의 부모의 부모의 부모로 설정
 
 # 환경 변수 읽기
 env = environ.Env()
 # 프로젝트 루트의 .env 파일 경로를 명시적으로 지정/ .env가 있는 config의 상위 디렉토리까지 가야함
-environ.Env.read_env(os.path.join(BASE_DIR.parent, '.env')) # .env 파일을 읽어옴
+environ.Env.read_env(os.path.join(BASE_DIR, '.env')) # .env 파일을 읽어옴
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -59,7 +59,7 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -128,3 +128,24 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'users.User'
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
+
+SIMPLE_JWT = {
+    "AUTH_HEADER_TYPES": ("Bearer",),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=300),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
+    # retate => refresh할 때 access token과 함께 refresh token도 같이 재발행
+    "ROTATE_REFRESH_TOKENS": True,
+    # refresh 후 그 refresh token 블랙리스트 등록
+    "BLACKLIST_AFTER_ROTATION": True,
+    "ALGORITHM": "HS256",
+    "SIGNING_KEY": SECRET_KEY,
+}

@@ -47,6 +47,29 @@ class User(AbstractBaseUser, CommonModel, PermissionsMixin):
 
 	objects = UserManager()
 
+	def save(self, *args, **kwargs):
+		# superuser면 admin true
+		if self.is_superuser:
+			self.is_admin = True
+
+		# is_admin이 True일 때 is_staff도 True로 설정
+		if self.is_admin:
+			self.is_staff = True
+		super().save(*args, **kwargs)
+
+	# 권한 관련 메서드
+	def has_perm(self, perm, obj=None):
+		# is_staff=True이면 모든 권한을 부여
+		if self.is_staff:
+			return True
+		return False
+
+	def has_module_perms(self, app_label):
+		# is_staff=True이면 모든 앱의 권한을 부여
+		if self.is_staff:
+			return True
+		return False
+
 	class Meta:
 		verbose_name = '사용자' # 모델 들어갔을 때 타이틀
 		verbose_name_plural = '사용자' # 모델 이름
