@@ -111,7 +111,6 @@ class JWTLoginView(APIView):
 
 # 로그아웃
 class JWTLogoutView(APIView):
-# blacklist 기능 - 토큰 유효기간이 지나지 않아도 블랙리스트에 등록(로그아웃)
 	authentication_classes = (JWTAuthentication,)  # jwt token이 있는지 검증
 	permission_classes = (IsAuthenticated,)  # 어떤 인증 방식이든 인증된 유저인지 검증
 
@@ -119,6 +118,7 @@ class JWTLogoutView(APIView):
 		try:
 			refresh_token = request.data.get('refresh')
 			token = RefreshToken(refresh_token)
+			# blacklist 기능 - 토큰 유효기간이 지나지 않아도 블랙리스트에 등록(로그아웃)
 			token.blacklist() # refresh token을 blacklist에 추가
 			return Response({"Successfully logged out"}, status=status.HTTP_205_RESET_CONTENT)
 		except Exception as e:
