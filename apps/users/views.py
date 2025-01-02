@@ -85,7 +85,7 @@ class UserDetailView(APIView):
 		self.check_permission(request, pk)  # 예외가 발생하지 않으면 다음으로 진행
 		user = get_object_or_404(User, pk=pk)
 		user.delete()
-		return Response("delete complete", status=status.HTTP_204_NO_CONTENT)
+		return Response("delete complete", status=status.HTTP_200_OK)
 
 
 # 로그인

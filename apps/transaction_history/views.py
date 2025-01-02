@@ -176,5 +176,5 @@ class TransactionHistoryDetailView(APIView):
 
         # 거래 내역 삭제
         transaction.delete()
-        # 성공 메세지와 함게 204 반환
-        return Response({"message": "거래 내역이 성공적으로 삭제되었습니다."}, status=status.HTTP_204_NO_CONTENT)
+        # 성공 메세지와 함게 200 반환
+        return Response({"message": "거래 내역이 성공적으로 삭제되었습니다."}, status=status.HTTP_200_OK)
