@@ -7,9 +7,9 @@ from .models import Account
 from .serializers import AccountSeriailzer
 
 
-class AccountListCreateApiView(APIView):    # 계좌 목록 조회 , 생성을 처리함
-    # authentication_classes = [JWTAuthentication] # 사용자가 로그인해서 받은 JWT 토큰을 확인하여 인증 처리함
-    # permission_classes = [IsAuthenticated] # 로그인한 사용자만 이 API 사용 가능함
+class AccountListApiView(APIView):    # 계좌 목록 조회 , 생성을 처리함
+    authentication_classes = [JWTAuthentication] # 사용자가 로그인해서 받은 JWT 토큰을 확인하여 인증 처리함
+    permission_classes = [IsAuthenticated] # 로그인한 사용자만 이 API 사용 가능함
    
    
     def get(self, request): # 계좌 목록 조회
