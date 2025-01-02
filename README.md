@@ -4,4 +4,4 @@
 
 ![플로우차트](https://github.com/user-attachments/assets/968306b1-963b-4e2b-9acb-2fde0d899911)
 
-![Uploading 스크린샷 2025-01-02 오후 2.33.11.png…]
+<img width="1208" alt="스크린샷 2025-01-02 오후 2 33 11" src="https://github.com/user-attachments/assets/13b41d6a-7381-4b92-af94-3db72f9ff56c" />
