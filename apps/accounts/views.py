@@ -33,7 +33,7 @@ class AccountDeleteAPIView(APIView): # 계좌 삭제 처리
         try:
             account = Account.objects.get(pk=pk,user=request.user) # pk는 계좌의 고유 ID, 로그인한 사용자와 관련된 계좌만 삭제
             account.delete() # 해당 계좌 삭제
-            return Response({"detail": "Account deleted successfully."}, status=status.HTTP_200_OK) # 삭제 성공 메시지와 상태코드 200(삭제 성공을 의미)
+            return Response({"detail": "Account deleted successfully."}, status=status.HTTP_200_OK)
         except Account.DoesNotExist:
             return Response({"detail": "Account not found."}, status=status.HTTP_404_NOT_FOUND) # 해당 계좌를 찾을 수 없다면 찾을 수 없다는 메시지와 상태코드 404
 

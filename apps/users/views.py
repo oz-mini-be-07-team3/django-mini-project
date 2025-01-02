@@ -86,6 +86,7 @@ class UserDetailView(APIView):
 		user = get_object_or_404(User, pk=pk)
 		user.delete()
 		return Response("delete complete", status=status.HTTP_200_OK)
+		# status 204는 body에 아무 메세지도 포함시키지 않기 때문에 성공 메세지를 보내기 위해선 200 OK를 써야함
 
 
 # 로그인
