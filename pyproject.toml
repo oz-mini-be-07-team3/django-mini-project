@@ -6,7 +6,7 @@ authors = ["hyo <umdoongs@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies] # 배포 환경
-python = "^3.13"
+python = "^3.12.6"
 django = "5.1.4"
 djangorestframework = "3.15.2"
 psycopg2 = "2.9.10"
