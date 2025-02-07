@@ -1,4 +1,3 @@
-from django.test import TestCase
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 
@@ -12,12 +11,14 @@ from .models import User
 data = {'email': 'asd@gmail.com', 'password': 'password'}
 super_data = {'email': 'as@gmail.com', 'password': 'password'}
 
+
 class APITestCaseSetUp(APITestCase):
 	def setUp(self):
 		self.user = User.objects.create_user(email=data['email'], password=data['password'])
 		refresh = RefreshToken.for_user(self.user)
 		self.token = str(refresh.access_token)
 		self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {self.token}")
+
 
 class CreateUserAuthorizedTestCase(APITestCaseSetUp):
 	# 일반 유저 생성 시 권한 부여 테스트 함수
@@ -56,7 +57,8 @@ class JWTAuthTestCase(APITestCaseSetUp):
 		refresh = RefreshToken.for_user(self.user)
 		url = reverse('logout')
 		response = self.client.post(url, data={'refresh': str(refresh)})
-		self.assertEqual(response.status_code, status.HTTP_205_RESET_CONTENT)
+		self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
 
 class UserAPITestCase(APITestCaseSetUp):
 	# C
